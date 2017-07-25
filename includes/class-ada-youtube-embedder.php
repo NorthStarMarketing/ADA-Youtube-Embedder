@@ -111,6 +111,28 @@ class Ada_Youtube_Embedder {
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-ada-youtube-embedder-admin.php';
+		
+		/**
+		 * The class responsible for updating the plugin when github repo is updated.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'updater/updater.php';
+		
+		if ( is_admin() ) { // note the use of is_admin() to double check that this is happening in the admin
+			$config = array(
+				'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
+				'proper_folder_name' => 'ada-youtube-embedder', // this is the name of the folder your plugin lives in
+				'api_url' => 'https://api.github.com/repos/NorthStarMarketing/ADA-Youtube-Embedder', // the GitHub API url of your GitHub repo
+				'raw_url' => 'https://raw.github.com/NorthStarMarketing/ADA-Youtube-Embedder/master', // the GitHub raw url of your GitHub repo
+				'github_url' => 'https://github.com/NorthStarMarketing/ADA-Youtube-Embedder', // the GitHub url of your GitHub repo
+				'zip_url' => 'https://github.com/NorthStarMarketing/ADA-Youtube-Embedder/zipball/master', // the zip url of the GitHub repo
+				'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+				'requires' => '3.0', // which version of WordPress does your plugin require?
+				'tested' => '3.3', // which version of WordPress is your plugin tested up to?
+				'readme' => 'readme.md', // which file to use as the readme for the version number
+				'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
+			);
+			new WP_GitHub_Updater($config);
+		}
 
 		$this->loader = new Ada_Youtube_Embedder_Loader();
 
